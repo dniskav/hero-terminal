@@ -23,6 +23,13 @@ export interface TerminalTheme {
   fontSize?: number | string
   /** Border radius of the terminal window — number (px) or CSS string */
   borderRadius?: number | string
+  /**
+   * Title bar / window chrome style.
+   * - `"mac"` — colored traffic-light dots on the left (default)
+   * - `"windows"` — flat minimize/maximize/close buttons on the right, pin on the left
+   * - `"linux"` — muted dots on the left, circular close button on the right
+   */
+  windowStyle?: 'mac' | 'windows' | 'linux'
 }
 
 // ─── Public types ─────────────────────────────────────────────────────────────
@@ -116,6 +123,14 @@ export interface TerminalConfig {
    * Examples: `"$"`, `">"`, `"PS>"`, `"λ"`.
    */
   promptSymbol?: string
+  /**
+   * Title bar / window chrome style.
+   * Overrides the theme's `windowStyle` if set.
+   * - `"mac"` — colored traffic-light dots on the left (default)
+   * - `"windows"` — flat minimize/maximize/close buttons on the right, pin on the left
+   * - `"linux"` — muted dots on the left, circular close button on the right
+   */
+  windowStyle?: 'mac' | 'windows' | 'linux'
 }
 
 export interface HeroTerminalProps {

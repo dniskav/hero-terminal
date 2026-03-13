@@ -11,8 +11,113 @@ interface TerminalShellProps {
   resolvedCommands: Record<string, CommandDef>
 }
 
+// ─── Title bar styles ──────────────────────────────────────────────────────────
+
+const TITLE_LABEL_STYLE: React.CSSProperties = {
+  flex: 1,
+  fontFamily: 'var(--ht-font-family, monospace)',
+  fontSize: 10,
+  opacity: 0.5,
+  color: 'var(--ht-fg, #ffffff)',
+  userSelect: 'none',
+}
+
+function PinButton({ pinned, onPin }: { pinned: boolean; onPin: () => void }) {
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onPin() }}
+      title={pinned ? 'Unpin terminal' : 'Pin terminal (drag anywhere)'}
+      style={{
+        cursor: 'pointer',
+        border: pinned ? '1px solid rgba(59,130,246,0.4)' : '1px solid transparent',
+        borderRadius: 4,
+        padding: '2px 6px',
+        fontSize: 10,
+        fontFamily: 'var(--ht-font-family, monospace)',
+        background: pinned ? 'rgba(59,130,246,0.2)' : 'transparent',
+        color: pinned ? 'var(--ht-accent, #3b82f6)' : 'rgba(255,255,255,0.4)',
+        transition: 'all 0.15s',
+        flexShrink: 0,
+      }}
+    >
+      {pinned ? '📌 pinned' : '📌'}
+    </button>
+  )
+}
+
+function TitleBarMac({ pinned, onPin }: { pinned: boolean; onPin: () => void }) {
+  return (
+    <>
+      <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(239,68,68,0.7)', display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(234,179,8,0.7)', display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(34,197,94,0.7)', display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ ...TITLE_LABEL_STYLE, marginLeft: 8 }}>terminal</span>
+      <PinButton pinned={pinned} onPin={onPin} />
+    </>
+  )
+}
+
+function TitleBarWindows({ pinned, onPin }: { pinned: boolean; onPin: () => void }) {
+  const btnBase: React.CSSProperties = {
+    width: 28,
+    height: 28,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 11,
+    userSelect: 'none',
+    flexShrink: 0,
+  }
+  return (
+    <>
+      <PinButton pinned={pinned} onPin={onPin} />
+      <span style={{ ...TITLE_LABEL_STYLE, textAlign: 'center', marginLeft: 8 }}>terminal</span>
+      {/* Decorative Windows chrome buttons */}
+      <div style={{ display: 'flex', gap: 0, marginRight: -8 }}>
+        <span style={{ ...btnBase, opacity: 0.35, color: 'var(--ht-fg, #fff)' }}>─</span>
+        <span style={{ ...btnBase, opacity: 0.35, color: 'var(--ht-fg, #fff)', fontSize: 9 }}>⬜</span>
+        <span style={{ ...btnBase, opacity: 0.65, color: 'rgba(239,68,68,0.9)', fontSize: 13 }}>✕</span>
+      </div>
+    </>
+  )
+}
+
+function TitleBarLinux({ pinned, onPin }: { pinned: boolean; onPin: () => void }) {
+  return (
+    <>
+      {/* Muted dots (no color) */}
+      <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ ...TITLE_LABEL_STYLE, marginLeft: 8 }}>terminal</span>
+      <PinButton pinned={pinned} onPin={onPin} />
+      {/* Decorative round close button */}
+      <span
+        style={{
+          width: 14,
+          height: 14,
+          borderRadius: '50%',
+          background: 'rgba(239,68,68,0.45)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 8,
+          color: 'rgba(255,255,255,0.5)',
+          flexShrink: 0,
+          marginLeft: 4,
+          userSelect: 'none',
+        }}
+      >
+        ✕
+      </span>
+    </>
+  )
+}
+
+// ─── Shell ─────────────────────────────────────────────────────────────────────
+
 export function TerminalShell({ pinned, onPin, config, resolvedCommands }: TerminalShellProps) {
-  const { introLines, typingSpeed, delayBetweenLines, onNavigate, onSwitchLocale, onSetTheme, height, resizable, promptSymbol } =
+  const { introLines, typingSpeed, delayBetweenLines, onNavigate, onSwitchLocale, onSetTheme, height, resizable, promptSymbol, windowStyle } =
     config
 
   const { introStep, introComplete } = useIntro(introLines, typingSpeed, delayBetweenLines)
@@ -54,6 +159,11 @@ export function TerminalShell({ pinned, onPin, config, resolvedCommands }: Termi
         overflow: 'hidden',
       }
 
+  const titleBarContent =
+    windowStyle === 'windows' ? <TitleBarWindows pinned={pinned} onPin={onPin} /> :
+    windowStyle === 'linux'   ? <TitleBarLinux   pinned={pinned} onPin={onPin} /> :
+                                <TitleBarMac     pinned={pinned} onPin={onPin} />
+
   return (
     <div onClick={() => inputRef.current?.focus({ preventScroll: true })} style={outerStyle}>
       {/* Title bar */}
@@ -64,33 +174,13 @@ export function TerminalShell({ pinned, onPin, config, resolvedCommands }: Termi
           alignItems: 'center',
           gap: '6px',
           borderBottom: '1px solid var(--ht-border, rgba(255,255,255,0.1))',
-          padding: '8px 16px',
+          padding: '8px 12px',
           cursor: 'default',
           background: 'var(--ht-header-bg, transparent)',
           flexShrink: 0,
-        }}>
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(239,68,68,0.7)', display: 'inline-block' }} />
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(234,179,8,0.7)', display: 'inline-block' }} />
-        <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'rgba(34,197,94,0.7)', display: 'inline-block' }} />
-        <span style={{ marginLeft: 8, flex: 1, fontFamily: 'var(--ht-font-family, monospace)', fontSize: 10, opacity: 0.5, color: 'var(--ht-fg, #ffffff)' }}>
-          terminal
-        </span>
-        <button
-          onClick={(e) => { e.stopPropagation(); onPin() }}
-          title={pinned ? 'Unpin terminal' : 'Pin terminal (drag anywhere)'}
-          style={{
-            cursor: 'pointer',
-            border: pinned ? '1px solid rgba(59,130,246,0.4)' : '1px solid transparent',
-            borderRadius: 4,
-            padding: '2px 6px',
-            fontSize: 10,
-            fontFamily: 'var(--ht-font-family, monospace)',
-            background: pinned ? 'rgba(59,130,246,0.2)' : 'transparent',
-            color: pinned ? 'var(--ht-accent, #3b82f6)' : 'rgba(255,255,255,0.4)',
-            transition: 'all 0.15s',
-          }}>
-          {pinned ? '📌 pinned' : '📌'}
-        </button>
+        }}
+      >
+        {titleBarContent}
       </div>
 
       {/* Content */}
@@ -133,14 +223,21 @@ export function TerminalShell({ pinned, onPin, config, resolvedCommands }: Termi
                 aria-hidden
                 style={{
                   position: 'absolute',
-                  inset: 0,
+                  top: 0,
+                  left: 0,
+                  right: 0,
                   pointerEvents: 'none',
                   userSelect: 'none',
                   whiteSpace: 'pre',
                   color: 'rgba(255,255,255,0.25)',
                   fontFamily: 'var(--ht-font-family, monospace)',
                   fontSize: 'var(--ht-font-size, 12px)',
-                }}>
+                  lineHeight: 'normal',
+                  padding: 0,
+                  margin: 0,
+                  border: 0,
+                }}
+              >
                 {input}
                 <span>{ghostText}</span>
               </span>
@@ -158,6 +255,9 @@ export function TerminalShell({ pinned, onPin, config, resolvedCommands }: Termi
                   color: 'var(--ht-fg, #ffffff)',
                   border: 'none',
                   outline: 'none',
+                  padding: 0,
+                  margin: 0,
+                  lineHeight: 'normal',
                   fontFamily: 'var(--ht-font-family, monospace)',
                   fontSize: 'var(--ht-font-size, 12px)',
                   caretColor: 'var(--ht-accent, #3b82f6)',

@@ -94,6 +94,7 @@ export function HeroTerminal({ config = {} }: HeroTerminalProps) {
       height: config.height ?? DEFAULT_HEIGHT,
       resizable: config.resizable ?? false,
       promptSymbol: config.promptSymbol ?? themeObj.promptSymbol ?? '❯',
+      windowStyle: config.windowStyle ?? themeObj.windowStyle ?? 'mac',
     }
   }, [config])
 

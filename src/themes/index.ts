@@ -170,7 +170,8 @@ export const themes: Record<string, TerminalTheme> = {
     fontFamily: '"Cascadia Code", "Consolas", monospace',
     fontSize: 13,
     borderRadius: '0.25rem',
-    promptSymbol: 'PS>',
+    promptSymbol: 'PS C:\\>',
+    windowStyle: 'windows',
   },
 
   cmd: {
@@ -183,7 +184,8 @@ export const themes: Record<string, TerminalTheme> = {
     fontFamily: '"Consolas", "Courier New", monospace',
     fontSize: 14,
     borderRadius: '0',
-    promptSymbol: '>',
+    promptSymbol: 'C:\\>',
+    windowStyle: 'windows',
   },
 }
 
