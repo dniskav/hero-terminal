@@ -5,6 +5,8 @@ An interactive terminal component for React hero sections. Features a typing ani
 ![npm](https://img.shields.io/npm/v/@dniskav/hero-terminal)
 ![license](https://img.shields.io/npm/l/@dniskav/hero-terminal)
 
+**[Live demo →](https://dniskav.github.io/hero-terminal/)**
+
 ---
 
 ## Installation
