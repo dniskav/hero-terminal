@@ -5,7 +5,8 @@ import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import { usePinnedTerminal } from './hooks/usePinnedTerminal'
 import { TerminalShell } from './components/TerminalShell'
-import type { HeroTerminalProps, CommandDef, TerminalConfig } from './types'
+import { themes } from './themes'
+import type { HeroTerminalProps, CommandDef, TerminalConfig, TerminalTheme } from './types'
 
 // ─── Defaults ─────────────────────────────────────────────────────────────────
 
@@ -14,6 +15,8 @@ const DEFAULT_INTRO_LINES = [
 ]
 const DEFAULT_TYPING_SPEED = 36
 const DEFAULT_DELAY_BETWEEN_LINES = 800
+const DEFAULT_WIDTH = 320
+const DEFAULT_HEIGHT = 288
 
 function buildDefaultCommands(): Record<string, CommandDef> {
   return {
@@ -26,7 +29,7 @@ function buildDefaultCommands(): Record<string, CommandDef> {
           </p>
           {Object.entries(allCommands).map(([cmd, { description }]) => (
             <p key={cmd} style={{ display: 'flex', gap: '0.5rem', margin: 0 }}>
-              <span style={{ color: 'white', minWidth: '120px', fontFamily: 'monospace' }}>{cmd}</span>
+              <span style={{ color: 'var(--ht-fg, #ffffff)', minWidth: '120px', fontFamily: 'var(--ht-font-family, monospace)' }}>{cmd}</span>
               <span style={{ opacity: 0.6 }}>{description}</span>
             </p>
           ))}
@@ -43,13 +46,40 @@ function buildDefaultCommands(): Record<string, CommandDef> {
   }
 }
 
+// ─── Theme helpers ────────────────────────────────────────────────────────────
+
+function resolveTheme(theme: string | TerminalTheme | undefined): TerminalTheme {
+  if (!theme) return {}
+  if (typeof theme === 'string') return themes[theme] ?? {}
+  return theme
+}
+
+function themeToVars(theme: TerminalTheme): Record<string, string> {
+  const vars: Record<string, string> = {}
+  if (theme.background) vars['--ht-bg'] = theme.background
+  if (theme.foreground) vars['--ht-fg'] = theme.foreground
+  if (theme.accent) vars['--ht-accent'] = theme.accent
+  if (theme.promptColor) vars['--ht-prompt'] = theme.promptColor
+  if (theme.border) vars['--ht-border'] = theme.border
+  if (theme.headerBackground) vars['--ht-header-bg'] = theme.headerBackground
+  if (theme.fontFamily) vars['--ht-font-family'] = theme.fontFamily
+  if (theme.fontSize)
+    vars['--ht-font-size'] =
+      typeof theme.fontSize === 'number' ? `${theme.fontSize}px` : theme.fontSize
+  if (theme.borderRadius)
+    vars['--ht-border-radius'] =
+      typeof theme.borderRadius === 'number' ? `${theme.borderRadius}px` : theme.borderRadius
+  return vars
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function HeroTerminal({ config = {} }: HeroTerminalProps) {
   const { pinned, mounted, pinnedPos, inlineRef, handlePin } = usePinnedTerminal()
 
-  const resolvedConfig = useMemo<Required<TerminalConfig>>(
-    () => ({
+  const resolvedConfig = useMemo<Required<TerminalConfig>>(() => {
+    const themeObj = resolveTheme(config.theme)
+    return {
       introLines: config.introLines ?? DEFAULT_INTRO_LINES,
       typingSpeed: config.typingSpeed ?? DEFAULT_TYPING_SPEED,
       delayBetweenLines: config.delayBetweenLines ?? DEFAULT_DELAY_BETWEEN_LINES,
@@ -59,8 +89,17 @@ export function HeroTerminal({ config = {} }: HeroTerminalProps) {
       onSwitchLocale: config.onSwitchLocale ?? (() => {}),
       onSetTheme: config.onSetTheme ?? (() => {}),
       persistHistory: config.persistHistory ?? true,
-    }),
-    [config],
+      theme: config.theme ?? 'default',
+      width: config.width ?? DEFAULT_WIDTH,
+      height: config.height ?? DEFAULT_HEIGHT,
+      resizable: config.resizable ?? false,
+      promptSymbol: config.promptSymbol ?? themeObj.promptSymbol ?? '❯',
+    }
+  }, [config])
+
+  const themeVars = useMemo(
+    () => themeToVars(resolveTheme(resolvedConfig.theme)),
+    [resolvedConfig.theme],
   )
 
   const resolvedCommands = useMemo<Record<string, CommandDef>>(() => {
@@ -70,6 +109,9 @@ export function HeroTerminal({ config = {} }: HeroTerminalProps) {
         : buildDefaultCommands()
     return { ...base, ...resolvedConfig.extraCommands }
   }, [resolvedConfig])
+
+  const widthValue =
+    typeof resolvedConfig.width === 'number' ? resolvedConfig.width : resolvedConfig.width
 
   const shell = (
     <TerminalShell
@@ -95,7 +137,8 @@ export function HeroTerminal({ config = {} }: HeroTerminalProps) {
               left: pinnedPos.x,
               top: pinnedPos.y,
               zIndex: 9999,
-              width: 320,
+              width: widthValue,
+              ...(themeVars as React.CSSProperties),
             }}
           >
             {shell}
@@ -116,11 +159,12 @@ export function HeroTerminal({ config = {} }: HeroTerminalProps) {
         ref={inlineRef}
         style={{
           width: '100%',
-          maxWidth: 320,
+          maxWidth: widthValue,
           transition: 'opacity 0.3s',
           opacity: pinned ? 0 : 1,
           pointerEvents: pinned ? 'none' : 'auto',
           visibility: pinned ? 'hidden' : 'visible',
+          ...(themeVars as React.CSSProperties),
         }}
       >
         {!pinned && shell}

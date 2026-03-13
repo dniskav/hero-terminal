@@ -137,6 +137,12 @@ The main component. All props are optional.
 | `onNavigate` | `(path: string) => void` | — | Called when a command triggers navigation |
 | `onSwitchLocale` | `() => void` | — | Called when a command triggers locale switch |
 | `onSetTheme` | `(theme: string) => void` | — | Called when a command triggers theme change |
+| `theme` | `string \| TerminalTheme` | `"default"` | Preset name or custom theme object (see [Theming](#theming)) |
+| `width` | `number \| string` | `320` | Terminal width — number (px) or any CSS value |
+| `height` | `number \| string` | `288` | Content area height — number (px) or any CSS value |
+| `resizable` | `boolean` | `false` | Allow user to resize by dragging the corner |
+| `persistHistory` | `boolean` | `true` | Persist command history (↑/↓) in localStorage |
+| `promptSymbol` | `string` | theme default / `"❯"` | Override the prompt symbol (e.g. `"$"`, `"PS>"`, `">"`) |
 
 ---
 
@@ -190,15 +196,91 @@ Context passed to every command action:
 
 ## Theming
 
-The accent color is controlled via the CSS custom property `--ht-accent` (default: `#3b82f6`):
+### Preset themes
+
+Pass a theme name via `config.theme`. Available presets:
+
+| Name | Style |
+|------|-------|
+| `default` | Dark blue (default) |
+| `dracula` | Purple & green |
+| `nord` | Arctic blue |
+| `monokai` | Classic editor |
+| `solarized-dark` | Warm dark |
+| `solarized-light` | Warm light |
+| `gruvbox` | Retro warm |
+| `one-dark` | Atom classic |
+| `catppuccin` | Pastel mocha |
+| `tokyo-night` | Neon city |
+| `bash` | Classic bash `$` |
+| `zsh` | Oh-My-Zsh style `❯` |
+| `powershell` | Windows PowerShell `PS>` |
+| `cmd` | Windows CMD `>` |
+
+```tsx
+<HeroTerminal config={{ theme: 'dracula' }} />
+<HeroTerminal config={{ theme: 'powershell' }} />
+<HeroTerminal config={{ theme: 'cmd' }} />
+```
+
+### Custom theme object
+
+Pass a `TerminalTheme` object to control every detail:
+
+```tsx
+import type { TerminalTheme } from '@dniskav/hero-terminal'
+
+const myTheme: TerminalTheme = {
+  background: '#0d1117',
+  foreground: '#e6edf3',
+  accent: '#58a6ff',
+  promptColor: '#3fb950',   // color of the prompt symbol
+  promptSymbol: '❯',        // the actual symbol (default: ❯)
+  border: '#30363d',
+  headerBackground: '#161b22',
+  fontFamily: '"JetBrains Mono", monospace',
+  fontSize: 13,
+  borderRadius: '0.5rem',
+}
+
+<HeroTerminal config={{ theme: myTheme }} />
+```
+
+### CSS Custom Properties
+
+All theme values map to CSS variables you can also set globally or per-scope:
+
+| Variable | Controls | Default |
+|----------|----------|---------|
+| `--ht-bg` | Window background | `rgba(0,0,0,0.85)` |
+| `--ht-fg` | Text color | `#ffffff` |
+| `--ht-accent` | Accent / caret color | `#3b82f6` |
+| `--ht-prompt` | Prompt symbol color | inherits `--ht-accent` |
+| `--ht-border` | Border & separators | `rgba(255,255,255,0.1)` |
+| `--ht-header-bg` | Title bar background | `transparent` |
+| `--ht-font-family` | Font family | `monospace` |
+| `--ht-font-size` | Font size | `12px` |
+| `--ht-border-radius` | Window corner radius | `0.75rem` |
 
 ```css
+/* Minimal override via CSS */
 :root {
-  --ht-accent: #10b981; /* emerald */
+  --ht-accent: #10b981;
+  --ht-font-size: 13px;
 }
 ```
 
-Apply it globally or scope it to the component's container.
+### Size & resize
+
+```tsx
+<HeroTerminal
+  config={{
+    width: 480,      // terminal width (px)
+    height: 320,     // scrollable content height (px)
+    resizable: true, // user can drag the bottom-right corner to resize
+  }}
+/>
+```
 
 ---
 

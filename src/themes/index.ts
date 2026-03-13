@@ -1,0 +1,190 @@
+import type { TerminalTheme } from '../types'
+
+export const themes: Record<string, TerminalTheme> = {
+  // ─── Unix / editor themes ───────────────────────────────────────────────────
+
+  default: {
+    background: 'rgba(0,0,0,0.85)',
+    foreground: '#ffffff',
+    accent: '#3b82f6',
+    border: 'rgba(255,255,255,0.1)',
+    headerBackground: 'transparent',
+    fontFamily: 'monospace',
+    fontSize: 12,
+    borderRadius: '0.75rem',
+    promptSymbol: '❯',
+  },
+
+  dracula: {
+    background: '#282a36',
+    foreground: '#f8f8f2',
+    accent: '#bd93f9',
+    promptColor: '#50fa7b',
+    border: '#44475a',
+    headerBackground: '#21222c',
+    fontFamily: '"Fira Code", "Cascadia Code", monospace',
+    fontSize: 12,
+    borderRadius: '0.5rem',
+    promptSymbol: '❯',
+  },
+
+  nord: {
+    background: '#2e3440',
+    foreground: '#d8dee9',
+    accent: '#88c0d0',
+    promptColor: '#a3be8c',
+    border: '#3b4252',
+    headerBackground: '#242933',
+    fontFamily: 'monospace',
+    fontSize: 12,
+    borderRadius: '0.5rem',
+    promptSymbol: '❯',
+  },
+
+  monokai: {
+    background: '#272822',
+    foreground: '#f8f8f2',
+    accent: '#a6e22e',
+    promptColor: '#66d9e8',
+    border: '#3e3d32',
+    headerBackground: '#1e1f1c',
+    fontFamily: '"Fira Code", monospace',
+    fontSize: 12,
+    borderRadius: '0.5rem',
+    promptSymbol: '❯',
+  },
+
+  'solarized-dark': {
+    background: '#002b36',
+    foreground: '#839496',
+    accent: '#2aa198',
+    promptColor: '#859900',
+    border: '#073642',
+    headerBackground: '#073642',
+    fontFamily: 'monospace',
+    fontSize: 12,
+    borderRadius: '0.5rem',
+    promptSymbol: '$',
+  },
+
+  'solarized-light': {
+    background: '#fdf6e3',
+    foreground: '#657b83',
+    accent: '#2aa198',
+    promptColor: '#859900',
+    border: '#eee8d5',
+    headerBackground: '#eee8d5',
+    fontFamily: 'monospace',
+    fontSize: 12,
+    borderRadius: '0.5rem',
+    promptSymbol: '$',
+  },
+
+  gruvbox: {
+    background: '#282828',
+    foreground: '#ebdbb2',
+    accent: '#fabd2f',
+    promptColor: '#b8bb26',
+    border: '#3c3836',
+    headerBackground: '#1d2021',
+    fontFamily: 'monospace',
+    fontSize: 12,
+    borderRadius: '0.25rem',
+    promptSymbol: '❯',
+  },
+
+  'one-dark': {
+    background: '#282c34',
+    foreground: '#abb2bf',
+    accent: '#61afef',
+    promptColor: '#98c379',
+    border: '#3e4452',
+    headerBackground: '#21252b',
+    fontFamily: 'monospace',
+    fontSize: 12,
+    borderRadius: '0.5rem',
+    promptSymbol: '❯',
+  },
+
+  catppuccin: {
+    background: '#1e1e2e',
+    foreground: '#cdd6f4',
+    accent: '#89b4fa',
+    promptColor: '#a6e3a1',
+    border: '#313244',
+    headerBackground: '#181825',
+    fontFamily: '"JetBrains Mono", monospace',
+    fontSize: 12,
+    borderRadius: '0.75rem',
+    promptSymbol: '❯',
+  },
+
+  'tokyo-night': {
+    background: '#1a1b26',
+    foreground: '#a9b1d6',
+    accent: '#7aa2f7',
+    promptColor: '#9ece6a',
+    border: '#292e42',
+    headerBackground: '#16161e',
+    fontFamily: 'monospace',
+    fontSize: 12,
+    borderRadius: '0.5rem',
+    promptSymbol: '❯',
+  },
+
+  bash: {
+    background: '#1a1a1a',
+    foreground: '#e0e0e0',
+    accent: '#00d7af',
+    promptColor: '#00d7af',
+    border: '#333333',
+    headerBackground: '#111111',
+    fontFamily: '"Ubuntu Mono", monospace',
+    fontSize: 13,
+    borderRadius: '0.25rem',
+    promptSymbol: '$',
+  },
+
+  zsh: {
+    background: '#1c1c1e',
+    foreground: '#ececec',
+    accent: '#af87ff',
+    promptColor: '#af87ff',
+    border: '#2e2e30',
+    headerBackground: '#141416',
+    fontFamily: '"MesloLGS NF", monospace',
+    fontSize: 13,
+    borderRadius: '0.5rem',
+    promptSymbol: '❯',
+  },
+
+  // ─── Windows shells ─────────────────────────────────────────────────────────
+
+  powershell: {
+    background: '#012456',
+    foreground: '#eeedf0',
+    accent: '#ffff00',
+    promptColor: '#ffff00',
+    border: '#1a4a8a',
+    headerBackground: '#001d47',
+    fontFamily: '"Cascadia Code", "Consolas", monospace',
+    fontSize: 13,
+    borderRadius: '0.25rem',
+    promptSymbol: 'PS>',
+  },
+
+  cmd: {
+    background: '#0c0c0c',
+    foreground: '#cccccc',
+    accent: '#cccccc',
+    promptColor: '#cccccc',
+    border: '#333333',
+    headerBackground: '#0c0c0c',
+    fontFamily: '"Consolas", "Courier New", monospace',
+    fontSize: 14,
+    borderRadius: '0',
+    promptSymbol: '>',
+  },
+}
+
+export type ThemeName = keyof typeof themes
