@@ -1,0 +1,67 @@
+{
+  "name": "@dniskav/hero-terminal",
+  "version": "0.1.0",
+  "description": "Interactive terminal component for React hero sections — typing animation, extensible commands, autocomplete, and draggable pinned mode.",
+  "author": "Daniel Niskav <hello@dniskav.com> (https://dniskav.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/dniskav/hero-terminal#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dniskav/hero-terminal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dniskav/hero-terminal/issues"
+  },
+  "keywords": [
+    "react",
+    "terminal",
+    "hero",
+    "portfolio",
+    "landing-page",
+    "component",
+    "typing-animation",
+    "framer-motion",
+    "interactive"
+  ],
+  "type": "module",
+  "main": "./dist/hero-terminal.umd.cjs",
+  "module": "./dist/hero-terminal.js",
+  "exports": {
+    ".": {
+      "import": "./dist/hero-terminal.js",
+      "require": "./dist/hero-terminal.umd.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "peerDependencies": {
+    "framer-motion": ">=11",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4",
+    "framer-motion": "^12",
+    "react": "^19",
+    "react-dom": "^19",
+    "typescript": "^5",
+    "vite": "^6",
+    "vite-plugin-dts": "^4",
+    "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^15",
+    "vitest": "^1",
+    "jsdom": "^22"
+  }
+}
