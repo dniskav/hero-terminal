@@ -1,6 +1,6 @@
 # @dniskav/hero-terminal
 
-An interactive terminal component for React hero sections. Features a typing animation intro, command system, autocomplete, command history navigation, and a draggable pinned mode — all with zero framework dependencies beyond React and Framer Motion.
+A **decorative terminal component** for React hero sections. It looks and feels like a real terminal — typing animation, autocomplete, command history — but it's purely cosmetic: commands and output are defined by you. Perfect for portfolios and landing pages that want a technical aesthetic without the complexity of a real shell.
 
 ![npm](https://img.shields.io/npm/v/@dniskav/hero-terminal)
 ![license](https://img.shields.io/npm/l/@dniskav/hero-terminal)
