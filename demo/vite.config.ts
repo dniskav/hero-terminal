@@ -4,6 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/hero-terminal/',
   resolve: {
     // Always resolve these from demo/node_modules, even when importing
     // source files from the parent directory (../../src/*)
