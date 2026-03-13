@@ -58,6 +58,7 @@ export function HeroTerminal({ config = {} }: HeroTerminalProps) {
       onNavigate: config.onNavigate ?? (() => {}),
       onSwitchLocale: config.onSwitchLocale ?? (() => {}),
       onSetTheme: config.onSetTheme ?? (() => {}),
+      persistHistory: config.persistHistory ?? true,
     }),
     [config],
   )
