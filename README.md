@@ -143,6 +143,7 @@ The main component. All props are optional.
 | `resizable` | `boolean` | `false` | Allow user to resize by dragging the corner |
 | `persistHistory` | `boolean` | `true` | Persist command history (↑/↓) in localStorage |
 | `promptSymbol` | `string` | theme default / `"❯"` | Override the prompt symbol (e.g. `"$"`, `"PS>"`, `">"`) |
+| `windowStyle` | `"mac" \| "windows" \| "linux"` | theme default / `"mac"` | Title bar chrome style |
 
 ---
 
@@ -268,6 +269,20 @@ All theme values map to CSS variables you can also set globally or per-scope:
   --ht-accent: #10b981;
   --ht-font-size: 13px;
 }
+```
+
+### Window style
+
+Controls the title bar chrome. The `powershell` and `cmd` presets automatically use `"windows"`.
+
+| Value | Title bar |
+|-------|-----------|
+| `"mac"` | Colored traffic-light dots left, pin right (default) |
+| `"windows"` | Pin left, title center, `— □ ✕` buttons right |
+| `"linux"` | Muted grey dots left, circular close right |
+
+```tsx
+<HeroTerminal config={{ theme: 'nord', windowStyle: 'linux' }} />
 ```
 
 ### Size & resize
