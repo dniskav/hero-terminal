@@ -1,6 +1,6 @@
 {
   "name": "@dniskav/hero-terminal",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Interactive terminal component for React hero sections — typing animation, extensible commands, autocomplete, and draggable pinned mode.",
   "author": "Daniel Niskav <hello@dniskav.com> (https://dniskav.com)",
   "license": "MIT",
