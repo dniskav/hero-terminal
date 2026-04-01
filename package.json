@@ -67,6 +67,6 @@
     "@testing-library/jest-dom": "^6",
     "@testing-library/react": "^15",
     "vitest": "^1",
-    "jsdom": "^22"
+    "jsdom": "^29"
   }
 }
